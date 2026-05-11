@@ -1,0 +1,101 @@
+╔════════════════════════════════════════════════════════════════╗
+║        CNN vs SCALED S-SSM Benchmark (Parameter-Matched)       ║
+╚════════════════════════════════════════════════════════════════╝
+
+Platform: aarch64 | Python 3.13.5 | PyTorch 2.11.0+cu130
+Device:   CPU (no GPU)
+
+================================================================
+  PHASE 1: MobileNetV2 (Passive CNN) on ExDark Low-Light
+================================================================
+  ✓ Loaded fine-tuned weights: /home/mevgin/try1/mobilenet_exdark_finetuned.pth
+  GFLOPs (fvcore): 0.3129
+  Parameters:      2.24 M
+  Full dataset: ExDark Low-Light (7363 images, 12 classes)
+  Sampled 50 images for timed inference
+  Warming up ARM CPU …
+  Temperature before dataset run: 55.1 °C
+  Running inference on 50 ExDark images …
+    [50/50] images processed …
+  Dataset inference complete in 3.6s
+  Running 20-iteration latency benchmark …
+
+  --- CNN Results ---
+  GFLOPs:                 0.3129
+  Parameters:             2.24 M
+  Latency (dummy, avg):   71.71 ms
+  FPS (dummy):            13.94
+  Latency (dataset, avg): 71.38 ms
+  FPS (dataset):          14.01
+  Accuracy (ExDark):      70.00%
+  Temperature:            55.1 → 62.8 °C (Δ +7.7 °C)
+
+================================================================
+  PHASE 2: Original S-SSM (d_model=64, 1 block) [C++ OPTIMIZED]
+================================================================
+  GFLOPs (fvcore): 0.0097
+  Parameters:      0.06 M
+  Warming up …
+  Running 20-iteration latency benchmark …
+
+  --- Original S-SSM Results ---
+  GFLOPs:     0.0097
+  Parameters: 0.06 M
+  Latency:    1.99 ms
+  FPS:        503.00
+  Temperature: 60.6 → 61.1 °C (Δ +0.5 °C)
+
+================================================================
+  PHASE 3: SCALED S-SSM (d_model=512, 6 blocks) [C++ OPTIMIZED]
+  ↳ Parameter-matched to MobileNetV2 (~2.24M)
+================================================================
+  GFLOPs (fvcore): 0.0806
+  Parameters:      2.28 M
+  Architecture:    6× MambaBlock (d=512, state=32) + residual + pre-norm
+  Warming up …
+  Running 20-iteration latency benchmark …
+
+  --- Scaled S-SSM Results ---
+  GFLOPs:     0.0806
+  Parameters: 2.28 M
+  Latency:    49.56 ms
+  FPS:        20.18
+  Temperature: 61.1 → 64.5 °C (Δ +3.3 °C)
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      COMPARISON: CNN vs C-Optimized S-SSM                    ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Metric                   │ CNN (MobileNetV2) │ C-S-SSM (Original) │ C-S-SSM (Scaled) ║
+╠═════════════════════════╪═══════════════════╪══════════════════╪═══════════════╣
+║ GFLOPs (fvcore)          │            0.3129 │           0.0097 │        0.0806 ║
+║ Parameters (M)           │              2.24 │             0.06 │          2.28 ║
+║ Latency (ms)             │             71.71 │             1.99 │         49.56 ║
+║ FPS                      │             13.94 │           503.00 │         20.18 ║
+║ Temp Start (°C)          │              55.1 │             60.6 │          61.1 ║
+║ Temp End (°C)            │              62.8 │             61.1 │          64.5 ║
+║ Temp Delta (°C)          │              +7.7 │             +0.5 │          +3.3 ║
+╠═════════════════════════╪═══════════════════╪══════════════════╪═══════════════╣
+║ FLOP Reduction vs CNN    │      1.00× (base) │      32.3× fewer │    3.9× fewer ║
+║ Param Ratio vs CNN       │      1.00× (base) │      39.0× fewer │        0.98×  ║
+║ Speedup vs CNN           │      1.00× (base) │           36.07× │         1.45× ║
+╠═════════════════════════╧═══════════════════╧══════════════════╧═══════════════╣
+║  CNN Dataset Metrics (ExDark Low-Light)                                      ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  Total Images:   7363  |  Sampled:   50  |  Avg Latency: 71.38 ms  |  Accuracy: 70.0%║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Platform: aarch64 | Python 3.13.5 | PyTorch 2.11.0+cu130
+Device:   Raspberry Pi 5 (ARM Cortex-A76, passive cooling)
+Dataset:  ExDark Low-Light (7363 images, 12 classes)
+Profiler: fvcore 0.1.5.post20221221
+
+──────────────────────────────────────────────────────────────────────────────
+KEY TAKEAWAYS:
+  • Scaled S-SSM matches CNN params (2.28M vs 2.24M) but uses 3.9× fewer FLOPs
+  • CNN latency: 71.7ms vs Scaled S-SSM: 49.6ms (S-SSM faster)
+  • Thermal: CNN Δ+7.7°C vs Scaled S-SSM Δ+3.3°C
+  • S-SSM thermal advantage: 2.3× cooler
+──────────────────────────────────────────────────────────────────────────────
+
+✓ Scaled benchmark complete.

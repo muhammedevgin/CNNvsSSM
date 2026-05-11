@@ -1,0 +1,81 @@
+Platform: aarch64 | Python 3.13.5 | PyTorch 2.11.0+cu130
+Device:   CPU (no GPU)
+
+============================================================
+  PHASE 1: MobileNetV2 (Passive CNN) on ExDark Low-Light
+============================================================
+  ✓ Loaded fine-tuned weights: /home/mevgin/try1/mobilenet_exdark_finetuned.pth
+  GFLOPs (fvcore): 0.3129
+  Parameters:      2.24 M
+  Full dataset: ExDark Low-Light (7363 images, 12 classes)
+  Sampled 100 images for timed inference
+  Classes: ['Bicycle', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cup', 'Dog', 'Motorbike', 'People', 'Table']
+  Warming up ARM CPU …
+  Temperature before dataset run: 58.4 °C
+  Running inference on 100 ExDark images …
+    [50/100] images processed …
+    [100/100] images processed …
+  Dataset inference complete in 7.0s
+  Running 50-iteration latency benchmark …
+
+  --- CNN Results Summary ---
+  GFLOPs:                 0.3129
+  Parameters:             2.24 M
+  Latency (dummy, avg):   70.21 ms
+  FPS (dummy):            14.24
+  Latency (dataset, avg): 70.14 ms
+  FPS (dataset):          14.26
+  Accuracy (ExDark):      69.00%
+  Temperature start:      58.4 °C
+  Temperature end:        66.7 °C
+  Temperature delta:      +8.3 °C
+
+============================================================
+  PHASE 2: Theoretical S-SSM Targets (UAV Vision Mamba)
+============================================================
+  GFLOPs (fvcore): 0.0114
+  Parameters:      0.06 M
+  Warming up …
+  Running 50-iteration latency benchmark …
+
+  --- S-SSM Theoretical Target Summary ---
+  GFLOPs:            0.0114
+  Parameters:        0.06 M
+  Latency (avg):     102.87 ms
+  FPS:               9.72
+  Temperature start: 65.0 °C
+  Temperature end:   67.8 °C
+  Temperature delta: +2.8 °C
+
+
+╔══════════════════════════════════════════════════════════════╗
+║      COMPARISON: Passive CNN on Pi  vs  Theoretical S-SSM    ║
+╠══════════════════════════════════════════════════════════════╣
+║ Metric                       │ CNN (MobileNetV2) │ S-SSM (Mamba) ║
+╠═════════════════════════════╪════════════════╪═══════════════╣
+║ GFLOPs (fvcore)              │         0.3129 │        0.0114 ║
+║ Parameters (M)               │           2.24 │          0.06 ║
+║ Latency (ms)                 │          70.21 │        102.87 ║
+║ FPS                          │          14.24 │          9.72 ║
+║ Temp Start (°C)              │           58.4 │          65.0 ║
+║ Temp End (°C)                │           66.7 │          67.8 ║
+║ Temp Delta (°C)              │           +8.3 │          +2.8 ║
+║ FLOP Reduction               │   1.00× (base) │  27.44× fewer ║
+║ Param Reduction              │   1.00× (base) │   39.0× fewer ║
+║ Speedup                      │   1.00× (base) │         0.68× ║
+╠═════════════════════════════╧════════════════╧═══════════════╣
+║  CNN Dataset Metrics (ExDark Low-Light)                      ║
+╠══════════════════════════════════════════════════════════════╣
+║ Total Dataset Images                     7363              ║
+║ Sampled for Benchmark                     100              ║
+║ Dataset Avg Latency (ms)                70.14              ║
+║ Dataset FPS                             14.26              ║
+║ ExDark Accuracy (%)                     69.00              ║
+╚══════════════════════════════════════════════════════════════╝
+
+Platform: aarch64 | Python 3.13.5 | PyTorch 2.11.0+cu130
+Device:   Raspberry Pi 5 (ARM Cortex-A76, passive cooling)
+Dataset:  ExDark Low-Light (7363 total images, 12 classes)
+Profiler: fvcore 0.1.5.post20221221
+
+✓ Benchmark complete.

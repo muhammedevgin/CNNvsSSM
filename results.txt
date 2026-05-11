@@ -1,0 +1,16 @@
+Platform: aarch64 | Python 3.13.5 | PyTorch 2.11.0+cu130
+Device:   CPU (no GPU)
+
+============================================================
+  PHASE 1: MobileNetV2 (Passive CNN) on ExDark Low-Light
+============================================================
+  ✓ Loaded fine-tuned weights: /home/mevgin/try1/mobilenet_exdark_finetuned.pth
+  GFLOPs (fvcore): 0.3129
+  Parameters:      2.24 M
+  Full dataset: ExDark Low-Light (7363 images, 12 classes)
+  Sampled 200 images for timed inference
+  Classes: ['Bicycle', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cup', 'Dog', 'Motorbike', 'People', 'Table']
+  Warming up ARM CPU …
+  Temperature before dataset run: 55.1 °C
+  Running inference on 200 ExDark images …
+    [50/200] images processed …
