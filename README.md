@@ -15,8 +15,16 @@ The core objective is to evaluate the architectural trade-offs—such as inferen
 * **Framework:** PyTorch
 * **Domain:** Edge AI / Embedded Machine Learning
 
+## 📄 Detailed Analysis & Final Report
+For an in-depth breakdown of the methodology, hardware profiling metrics, and architectural conclusions, please refer to the comprehensive project report:
+
+👉 **[Read the Full CNN vs. SSM Edge Evaluation Report](./CNN_vs_SSM_Final_Report.md)**
+
+*The report includes detailed visualizations of memory consumption, inference latency benchmarks, and a critical discussion on deploying state-space models on ARM-based edge devices.*
+
 ## Installation & Usage
 Clone the repository to your Raspberry Pi environment:
 ```bash
 git clone [https://github.com/muhammedevgin/CNNvsSSM.git](https://github.com/muhammedevgin/CNNvsSSM.git)
 cd CNNvsSSM
+
