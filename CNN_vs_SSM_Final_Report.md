@@ -1,4 +1,4 @@
-# Benchmarking Passive CNN vs. Theoretical S-SSM on Raspberry Pi 5
+# Edge AI Profiling: MobileNetV2 vs. C++ Optimized S-SSM on Raspberry Pi 5
 
 ## 1. Introduction
 This report provides a comprehensive performance comparison between a standard passive Convolutional Neural Network (MobileNetV2) and a theoretical Selective State-Space Model (S-SSM) on a resource-constrained edge device, specifically the **Raspberry Pi 5 (ARM Cortex-A76)**, operating with passive cooling. The evaluation is conducted using the **ExDark Low-Light** dataset (7,363 images, 12 classes).
